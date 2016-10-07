@@ -3,6 +3,7 @@ library(jsonlite)
 
 # Given a gene name, return a data frame with the corresponding Ensembl gene IDs.
 # The default species is human.
+# TODO: Fix error thrown by a bad gene name.
 getEnsemblGeneListForName <- function(gene.name, species = 'homo_sapiens') {
   url.tmpl <- 'https://rest.ensembl.org/xrefs/symbol/%s/%s?content-type=application/json'
   url <- sprintf(url.tmpl, species, toupper(gene.name))

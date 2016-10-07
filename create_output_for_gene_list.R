@@ -2,10 +2,14 @@ source('~/rtusk/MyFunctions/ensembl_rest_api_functions.R')
 source('~/rtusk/MyFunctions/file_functions.R')
 options(stringsAsFactors = FALSE)
 
+# Returns the first column in a given file. Use this to turn
+#  a single column of gene names into a vector.
 getGeneNamesFromFileAsVector <- function(gene.names.file) {
   return(getColumnAsVector(gene.names.file))
 }
 
+# Create and return a two-column data frame of column name mapped to
+#  Ensembl gene ID.
 getGeneNamesEnsemblIDsAsDataFrame <- function(gene.names) {
   gene.names.ensembl.ids.dataframe <- data.frame()
   for (gene.name in gene.names) {
@@ -19,6 +23,8 @@ getGeneNamesEnsemblIDsAsDataFrame <- function(gene.names) {
   return(gene.names.ensembl.ids.dataframe)
 }
 
+# Create a large data frame where all the values from the Ensembl REST API Gene
+#  JSON appear as columns.
 makeDataFrameForGeneList <- function(gene.names) {
   known.id.apoe <- 'ENSG00000130203'
   gene.attributes <- getEnsemblGeneAtrributeNames(known.id.apoe)
