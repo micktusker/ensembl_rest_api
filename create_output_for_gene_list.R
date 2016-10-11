@@ -1,5 +1,5 @@
-source('~/rtusk/MyFunctions/ensembl_rest_api_functions.R')
-source('~/rtusk/MyFunctions/file_functions.R')
+source('./ensembl_rest_api_functions.R')
+source('./file_functions.R')
 options(stringsAsFactors = FALSE)
 
 # Returns the first column in a given file. Use this to turn
