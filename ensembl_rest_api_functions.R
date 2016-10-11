@@ -3,7 +3,9 @@ library(jsonlite)
 
 # Given a gene name, return a data frame with the corresponding Ensembl gene IDs.
 # The default species is human.
-# The "try" captures the error thrown aby a gene name that is not found in Ensembl.
+# The "try" captures the error thrown by a gene name that is not found in Ensembl.
+# Calling code needs to check for NULL when a bad gene name is given. A successful
+#  call returns a data frame.
 getEnsemblGeneDataFrameForName <- function(gene.name, species = 'homo_sapiens') {
   url.tmpl <- 'https://rest.ensembl.org/xrefs/symbol/%s/%s?content-type=application/json'
   url <- sprintf(url.tmpl, species, toupper(gene.name))
@@ -11,10 +13,7 @@ getEnsemblGeneDataFrameForName <- function(gene.name, species = 'homo_sapiens') 
   if (class(result) == 'data.frame') {
     return(result)
   } else {
-    empty.data.frame <- data.frame()
-    empty.data.frame <- rbind(c('gene', sprintf('No_Ensembl_ID_Found: %s', gene.name)), empty.data.frame)
-    names(empty.data.frame) <- c("type", "id")
-    return(empty.data.frame)
+    return(NULL)
   }
 }
 
@@ -52,4 +51,18 @@ getEnsemblGeneAtrribute  <- function(ensembl.gene.id) {
     return(attribute.value)
   }
   return(getAttribute)
+}
+
+# Produces a vector of gene names where each gene name is in Ensembl.
+filterGeneNames <- function(gene.names, species = 'homo_sapiens') {
+  filtered.gene.names <- character()
+  counter = 1
+  for (gene.name in gene.names) {
+    gene.df.for.name <- getEnsemblGeneDataFrameForName(gene.name, species)
+    if( !is.null(gene.df.for.name)) {
+      filtered.gene.names[counter] <- gene.name
+      counter <- counter + 1
+    }
+  }
+  return(filtered.gene.names)
 }
